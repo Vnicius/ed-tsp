@@ -9,3 +9,4 @@ if __name__ == '__main__':
     reader = InstanceReader()
     instance = reader.get_instance(args.instance)
     initial_solution = ConstructionHeuristic().construct(instance)
+    print(initial_solution)
