@@ -10,8 +10,14 @@ if __name__ == '__main__':
     args = Arguments().args
     reader = InstanceReader()
     instance = reader.get_instance(args.instance)
+    construction = ConstructionHeuristic()
+    initial_solution = []
 
-    initial_solution = ConstructionHeuristic().construct_random(instance)
+    if args.construction == 'nearest':
+        initial_solution = construction.construct_nearest(instance)
+    elif args.construction == 'random':
+        initial_solution = construction.construct_random(instance)
+
     print("INITIAL: ", initial_solution)
     print("INITIAL COST: ", calculate_cost(initial_solution, instance.data))
     print()
