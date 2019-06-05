@@ -16,5 +16,9 @@ class Arguments():
 
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            'instance', help="Arquivo com as instâncias", type=str)
+            'instance', help="File with instances", type=str)
+        parser.add_argument('-m', '--method', help="Heuristic method",
+                            choices=['bi', 'fi', 'random', 'vnd', 'all'])
+        parser.add_argument(
+            '-l', '--limit', help="Limit for random and vnd methods", default=5, type=int)
         self.args = parser.parse_args()

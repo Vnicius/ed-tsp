@@ -12,32 +12,58 @@ if __name__ == '__main__':
     instance = reader.get_instance(args.instance)
 
     initial_solution = ConstructionHeuristic().construct_random(instance)
-    print(initial_solution)
-    print(calculate_cost(initial_solution, instance.data))
+    print("INITIAL: ", initial_solution)
+    print("INITIAL COST: ", calculate_cost(initial_solution, instance.data))
+    print()
 
-    best = best_improvement_method(initial_solution, instance.data)
-    print("Best")
-    print(best)
-    print(calculate_cost(best, instance.data))
+    if args.method == 'bi':
+        best = best_improvement_method(initial_solution, instance.data)
+        print("BEST IMPROVEMENT METHOD: ", best)
+        print("BEST IMPROVEMENT METHOD COST: ",
+              calculate_cost(best, instance.data))
 
-    #initial_solution = ConstructionHeuristic().construct_random(instance)
-    # print(initial_solution)
-    # print(calculate_cost(initial_solution, instance.data))
-    first = first_improvement_method(initial_solution, instance.data)
-    print("First")
-    print(first)
-    print(calculate_cost(first, instance.data))
+    elif args.method == 'fi':
+        first = first_improvement_method(initial_solution, instance.data)
+        print("FIRST IMPROVEMENT METHOD: ", first)
+        print("FIRST IMPROVEMENT METHOD COST: ",
+              calculate_cost(first, instance.data))
 
-    #initial_solution = ConstructionHeuristic().construct_random(instance)
-    # print(initial_solution)
-    # print(calculate_cost(initial_solution, instance.data))
+    elif args.method == 'random':
 
-    random_solution = random_method(initial_solution, instance.data)
-    print("Random")
-    print(random_solution)
-    print(calculate_cost(random_solution, instance.data))
+        random_solution = random_method(
+            initial_solution, instance.data, args.limit)
+        print("RANDOM METHOD: ", random_solution)
+        print("RANDOM METHOD COST: ", calculate_cost(
+            random_solution, instance.data))
 
-    vnd_solution = vnd_method(initial_solution, instance.data)
-    print("VND")
-    print(vnd_solution)
-    print(calculate_cost(vnd_solution, instance.data))
+    elif args.method == 'vnd':
+
+        vnd_solution = vnd_method(initial_solution, instance.data, args.limit)
+        print("VND METHOD: ", vnd_solution)
+        print("VND METHOD COST:", calculate_cost(vnd_solution, instance.data))
+
+    elif args.method == 'all':
+        best = best_improvement_method(initial_solution, instance.data)
+        print("BEST IMPROVEMENT METHOD: ", best)
+        print("BEST IMPROVEMENT METHOD COST: ",
+              calculate_cost(best, instance.data))
+        print()
+
+        first = first_improvement_method(initial_solution, instance.data)
+        print("FIRST IMPROVEMENT METHOD: ", first)
+        print("FIRST IMPROVEMENT METHOD COST: ",
+              calculate_cost(first, instance.data))
+        print()
+
+        random_solution = random_method(
+            initial_solution, instance.data, args.limit)
+        print("RANDOM METHOD: ", random_solution)
+        print("RANDOM METHOD COST: ", calculate_cost(
+            random_solution, instance.data))
+        print()
+
+        vnd_solution = vnd_method(initial_solution, instance.data, args.limit)
+        print("VND METHOD: ", vnd_solution)
+        print("VND METHOD COST:", calculate_cost(vnd_solution, instance.data))
+    else:
+        print("Chose a valid method!")

@@ -151,7 +151,6 @@ def vnd_method(initial_solution, distance_table, samples=5):
         # Calculate the candidate's cost
         candidate_cost = calculate_cost(best_candidate, distance_table)
 
-        # print(best_candidate)
         # Check if the candidate's cost is the lowest
         if candidate_cost < min_cost:
             # Define the candidate solution as the current solution
@@ -160,8 +159,5 @@ def vnd_method(initial_solution, distance_table, samples=5):
             k = 0       # Reboot the count
         else:
             k += 1      # Add 1 if not improve
-
-        # print(current_solution)
-        # input(k)
 
     return current_solution
