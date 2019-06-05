@@ -13,25 +13,23 @@ class ConstructionHeuristic():
         Returns:
             list -- initial solution
         """
-        data_matrix = instance.data
-        initial_solution = [0]
+        data_graph = instance.data
+        initial_solution = [data_graph[0]]
 
         while len(initial_solution) < instance.dimension:
-            min_distance = math.inf
-            min_distance_index = 0
+            last_node = initial_solution[-1]
+            nearest_nodes = sorted(last_node.neighborhood,
+                                   key=(lambda x: x.cost))
+            nearest_neighbor = None
 
-            for index, distance in enumerate(data_matrix[initial_solution[-1]]):
-
-                if (distance < min_distance) and (distance > 0.0) and (index not in initial_solution):
-                    min_distance = distance
-                    min_distance_index = index
-
-            initial_solution.append(min_distance_index)
+            for neighbor in nearest_nodes:
+                if neighbor.node.key not in [node.key for node in initial_solution]:
+                    initial_solution.append(neighbor.node)
+                    break
 
         return initial_solution
 
     def construct_random(self, instance):
-        initial_solution = list(range(instance.dimension))
-        random.shuffle(initial_solution)
+        initial_solution = random.sample(instance.data, len(instance.data))
 
         return initial_solution

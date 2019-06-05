@@ -1,18 +1,27 @@
 # -*- coding: utf-8 -*-
 
-def calculate_cost(solution, distance_matrix):
+
+def calculate_cost(solution):
     cost = 0
     size_points = len(solution)
 
     for index in range(size_points):
-        next_index = index if (index + 1) < size_points else 0
+        next_index = index + 1 if (index + 1) < size_points else 0
 
-        cost += distance_matrix[solution[index]][solution[next_index]]
+        next_neighbor = next((neighbor for neighbor in solution[index].neighborhood
+                              if neighbor.node.key == solution[next_index].key))
 
-    return cost 
+        cost += next_neighbor.cost
 
-def swap_neighborhood(solution, distance_matrix, i, j):
+    return cost
+
+
+def swap_neighborhood(solution, i, j):
     solution[i], solution[j] = solution[j], solution[i]
-    cost = calculate_cost(solution, distance_matrix)
+    cost = calculate_cost(solution)
 
     return solution, cost
+
+
+def solution_to_string(solution):
+    return str([node.key for node in solution])

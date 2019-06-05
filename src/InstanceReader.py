@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from src.Instance import Instance
+from src.Node import Node
+from src.Neighbor import Neighbor
 
 
 class InstanceReader():
@@ -26,7 +28,7 @@ class InstanceReader():
                 data = self.__get_instance_tsp_cup(file, dimension)
 
         return Instance(name, dimension, data)
-    
+
     def __get_instance_teste(self, file, dimension):
         data = np.zeros(shape=(dimension, dimension))
 
@@ -41,13 +43,13 @@ class InstanceReader():
                 except ValueError:
                     pass
             data[i] = numbers
-        
-        return data
-    
+
+        return self.__convert_to_graph(data, dimension)
+
     def __get_instance_tsp_cup(self, file, dimension):
         data_points = np.zeros(shape=(dimension, 2))
         data = np.zeros(shape=(dimension, dimension))
-        
+
         for i in range(dimension):
             line = file.readline()
 
@@ -57,14 +59,30 @@ class InstanceReader():
                     number = float(item)
                     if numbers_count >= 1:
                         data_points[i][numbers_count - 1] = number
-                    
+
                     numbers_count += 1
                 except ValueError:
                     pass
-        
+
         for index, point in enumerate(data_points):
             for neighbor_index in range(dimension):
                 neighbor = data_points[neighbor_index]
 
-                data[index][neighbor_index] = np.sqrt((point[0] - neighbor[0])**2.0 + (point[1] - neighbor[1])**2.0).round()
-        return data
+                data[index][neighbor_index] = np.sqrt(
+                    (point[0] - neighbor[0])**2.0 + (point[1] - neighbor[1])**2.0).round()
+
+        return self.__convert_to_graph(data, dimension)
+
+    def __convert_to_graph(self, data, dimension):
+        nodes = [Node(i) for i in range(dimension)]
+
+        for i, costs in enumerate(data):
+            neighborhood = []
+
+            for j, cost in enumerate(costs):
+                if cost != 0.0:
+                    neighborhood.append(Neighbor(node=nodes[j], cost=cost))
+
+            nodes[i].neighborhood = neighborhood
+
+        return nodes
