@@ -58,7 +58,7 @@ optional arguments:
   $ python run.py instancias/instancias_teste/bayg29.txt -m fi
 ```
 
-### Usando a método de 'First Improvement Method'
+### Usando a método de 'Variable Neighborhood Descent'
 
 ```
   $ python run.py instancias/instancias_teste/bayg29.txt -c nearest -m vnd
