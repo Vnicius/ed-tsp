@@ -2,10 +2,11 @@
 
 from copy import copy
 from src.utils.utils import calculate_cost, swap_neighborhood, solution_to_string
+from src.utils.plotsolution import plot_animated
 import random
 
 
-def best_improvement_method(initial_solution):
+def best_improvement_method(initial_solution, has_animation=False, title="Best Improvement Method"):
     """Try to search the best solution in the neighborhood
 
     Arguments:
@@ -38,10 +39,14 @@ def best_improvement_method(initial_solution):
                     min_cost = candidate_cost       # Change the lowest cost
                     current_solution = candidate_solution     # Change the best solution
 
+            if has_animation:
+                plot_animated(current_solution, title=title,
+                              has_points=False, show_key=True)
+
     return current_solution
 
 
-def first_improvement_method(initial_solution):
+def first_improvement_method(initial_solution, has_animation=False, title="First Improvement Method"):
     """Try to search the first best solution in the neighborhood
 
     Arguments:
@@ -73,7 +78,6 @@ def first_improvement_method(initial_solution):
                 candidate_solution, candidate_cost = swap_neighborhood(
                     copy(current_solution), i, j)
 
-                #print(candidate_cost, min_cost)
                 # Check if the candidate's cost is the lowest
                 if candidate_cost < min_cost:
                     has_new_search = True
@@ -84,10 +88,14 @@ def first_improvement_method(initial_solution):
             if has_new_search:
                 break       # Break in the first improvement
 
+            if has_animation:
+                plot_animated(current_solution, title=title,
+                              has_points=False, show_key=True)
+
     return current_solution
 
 
-def random_method(initial_solution, limit=5):
+def random_method(initial_solution, limit=5, has_animation=False, title="Random Method"):
     """Search the best solution in random neighbours
 
     Arguments:
@@ -119,10 +127,14 @@ def random_method(initial_solution, limit=5):
         else:
             count += 1      # Add 1 if not improve
 
+        if has_animation:
+            plot_animated(current_solution, title=title,
+                          has_points=False, show_key=True)
+
     return current_solution
 
 
-def vnd_method(initial_solution, samples=5):
+def vnd_method(initial_solution, samples=5, has_animation=False, title="VND Method"):
     """Search the best solution in random neighbours
 
     Arguments:
@@ -155,5 +167,9 @@ def vnd_method(initial_solution, samples=5):
             k = 0       # Reboot the count
         else:
             k += 1      # Add 1 if not improve
+
+        if has_animation:
+            plot_animated(current_solution, title=title,
+                          has_points=False, show_key=True)
 
     return current_solution

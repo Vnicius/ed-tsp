@@ -22,5 +22,9 @@ class Arguments():
         parser.add_argument('-m', '--method', help="Heuristic method",
                             choices=['bi', 'fi', 'random', 'vnd', 'all'], default='all', type=str)
         parser.add_argument(
-            '-l', '--limit', help="Limit for random and vnd methods", default=5, type=int)
+            '-l', '--limit', help='Limit for random and vnd methods', default=5, type=int)
+        parser.add_argument(
+            '-p', '--plot', help='Plot the result', action='store_true')
+        parser.add_argument('-a', '--animate',
+                            help='Animated plot', action='store_true')
         self.args = parser.parse_args()

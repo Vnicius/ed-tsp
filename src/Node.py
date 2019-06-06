@@ -2,6 +2,7 @@
 
 
 class Node():
-    def __init__(self, key, neighborhood=[]):
+    def __init__(self, key, neighborhood=[], point=None):
         self.key = key
         self.neighborhood = neighborhood
+        self.point = point

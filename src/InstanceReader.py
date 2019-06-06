@@ -3,6 +3,7 @@ import numpy as np
 from src.Instance import Instance
 from src.Node import Node
 from src.Neighbor import Neighbor
+from src.Point import Point
 
 
 class InstanceReader():
@@ -71,9 +72,9 @@ class InstanceReader():
                 data[index][neighbor_index] = np.sqrt(
                     (point[0] - neighbor[0])**2.0 + (point[1] - neighbor[1])**2.0).round()
 
-        return self.__convert_to_graph(data, dimension)
+        return self.__convert_to_graph(data, dimension, data_points)
 
-    def __convert_to_graph(self, data, dimension):
+    def __convert_to_graph(self, data, dimension, points=[]):
         nodes = [Node(i) for i in range(dimension)]
 
         for i, costs in enumerate(data):
@@ -84,5 +85,8 @@ class InstanceReader():
                     neighborhood.append(Neighbor(node=nodes[j], cost=cost))
 
             nodes[i].neighborhood = neighborhood
+
+            if len(points):
+                nodes[i].point = Point(points[i][0], points[i][1])
 
         return nodes
