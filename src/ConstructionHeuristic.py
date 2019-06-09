@@ -22,7 +22,7 @@ class ConstructionHeuristic():
                                    key=(lambda x: x.cost))
             nearest_neighbor = None
 
-            for neighbor in nearest_nodes:
+            for neighbor in nearest_nodes[1:]:
                 if neighbor.node.key not in [node.key for node in initial_solution]:
                     initial_solution.append(neighbor.node)
                     break

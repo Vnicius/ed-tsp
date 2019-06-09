@@ -1,161 +1,186 @@
 # -*- coding: utf-8 -*-
 
 from copy import copy
-from src.utils.utils import calculate_cost, swap_neighborhood, solution_to_string
+from src.utils.utils import calculate_cost, swap_neighborhood, solution_to_string, calculate_swap_cost, swap_2opt
 from src.utils.plotsolution import plot_animated
 import random
 
 
-def best_improvement_method(initial_solution, has_animation=False, title="Best Improvement Method"):
-    """Try to search the best solution in the neighborhood
+def swap_method(initial_solution, is_first=False, has_animation=False, title="Swap Method"):
+    """Search a new solution for TSP with swap method
 
     Arguments:
-        initial_solution {list} -- list with initial solution
+        initial_solution {list} -- initial solution
+
+    Keyword Arguments:
+        is_first {bool} -- if will use the First Improvement (default: {False})
+        has_animation {bool} -- if will the animate the search (default: {False})
+        title {str} -- title of the animation (default: {"Best Improvement Method"})
 
     Returns:
-        list -- solution founded
+        list -- the founded solution
     """
-
     current_solution = copy(
         initial_solution)       # Copy initial solution as current solution
     # Caculate the cost of the solution
     min_cost = calculate_cost(initial_solution)
     size_points = len(initial_solution)     # Get the number of points
-    has_new_search = True      # Check if has to make a new search
+    has_improvement = True      # Check if has improvement
 
-    while has_new_search:
-        has_new_search = False
+    while has_improvement:
+        has_improvement = False
 
         for i in range(size_points - 1):
-            for j in range(i+1, size_points - 1):
+            for j in range(i+1, size_points):
 
-                # Search a candidate in the neighborhood
-                candidate_solution, candidate_cost = swap_neighborhood(
-                    copy(current_solution), i, j)
+                # Calculate swap cost
+                candidate_cost = min_cost + calculate_swap_cost(
+                    current_solution, i, j)
 
                 # Check if the candidate's cost is the lowest
                 if candidate_cost < min_cost:
-                    has_new_search = True
-                    min_cost = candidate_cost       # Change the lowest cost
-                    current_solution = candidate_solution     # Change the best solution
+                    has_improvement = True
+                    min_cost = candidate_cost      # Change the lowest cost
+                    current_solution = swap_neighborhood(
+                        current_solution, i, j)     # Change the best solution
+                    if is_first:
+                        break
 
             if has_animation:
                 plot_animated(current_solution, title=title,
                               has_points=False, show_key=True)
 
+            if is_first and has_improvement:
+                break
+
     return current_solution
 
 
-def first_improvement_method(initial_solution, has_animation=False, title="First Improvement Method"):
-    """Try to search the first best solution in the neighborhood
+# def random_method(initial_solution, limit=5, has_animation=False, title="Random Method"):
+#     """Search the best solution in random neighbours
+
+#     Arguments:
+#         initial_solution {list} -- list with initial solution
+
+#     Keyword Arguments:
+#         limit {int} -- limit of not improvements (default: {5})
+
+#     Returns:
+#         list -- solution founded
+#     """
+#     current_solution = copy(
+#         initial_solution)       # Copy initial solution as current solution
+#     # Caculate the cost of the solution
+#     min_cost = calculate_cost(initial_solution)
+#     count = 0
+
+#     while count < limit:
+#         candidate_solution = copy(current_solution)
+#         random.shuffle(candidate_solution)      # Generate a radom candidate
+#         # Calculate the candidate's cost
+#         candidate_cost = calculate_cost(candidate_solution)
+
+#         # Check if the candidate's cost is the lowest
+#         if candidate_cost <= min_cost:
+#             min_cost = candidate_cost       # Change the lowest cost
+#             current_solution = candidate_solution     # Change the best solution
+#             count = 0       # Reboot the count
+#         else:
+#             count += 1      # Add 1 if not improve
+
+#         if has_animation:
+#             plot_animated(current_solution, title=title,
+#                           has_points=False, show_key=True)
+
+#     return current_solution
+
+
+def two_opt_method(initial_solution, is_first=False, has_animation=False, title="2-OPT Method"):
+    """Search a new solution for TSP with 2-OPT method
 
     Arguments:
-        initial_solution {list} -- list with initial solution
+        initial_solution {list} -- initial solution
+
+    Keyword Arguments:
+        is_first {bool} -- if will use the First Improvement (default: {False})
+        has_animation {bool} -- if will the animate the search (default: {False})
+        title {str} -- title of the animation (default: {"Best Improvement Method"})
 
     Returns:
-        list -- solution founded
+        list -- the founded solution
     """
-
     current_solution = copy(
         initial_solution)       # Copy initial solution as current solution
     # Caculate the cost of the solution
     min_cost = calculate_cost(initial_solution)
     size_points = len(initial_solution)     # Get the number of points
-    has_new_search = True      # Check if has to make a new search
+    has_improvement = True      # Check if has improvement
+    has_points = current_solution[0].point != None
 
-    while has_new_search:
-        has_new_search = False
-        # Select a random index to start
-        start_index = random.randint(0, size_points)
-        index_sequence = list(range(start_index, size_points)
-                              ) + list(range(0, start_index))       # Make a new list of indexes
-        random.shuffle(index_sequence)
+    while has_improvement:
+        has_improvement = False
 
-        for i in index_sequence:
-            for j in range(i+1, size_points - 1):
+        for i in range(size_points - 1):
+            for j in range(i+1, size_points):
 
-                # Search a candidate in the neighborhood
-                candidate_solution, candidate_cost = swap_neighborhood(
-                    copy(current_solution), i, j)
+                # Swap
+                candidate_cost = min_cost + \
+                    calculate_swap_cost(current_solution, i, j, True)
 
                 # Check if the candidate's cost is the lowest
                 if candidate_cost < min_cost:
-                    has_new_search = True
+                    has_improvement = True
                     min_cost = candidate_cost       # Change the lowest cost
-                    current_solution = candidate_solution     # Change the best solution
-                    break       # Break in the first improvement
+                    # Change the best solution
+                    current_solution = swap_2opt(current_solution, i, j)
 
-            if has_new_search:
-                break       # Break in the first improvement
+                    if is_first:
+                        break
 
             if has_animation:
                 plot_animated(current_solution, title=title,
-                              has_points=False, show_key=True)
+                              has_points=has_points, show_key=(not has_points))
+
+            if is_first and has_improvement:
+                break
 
     return current_solution
 
 
-def random_method(initial_solution, limit=5, has_animation=False, title="Random Method"):
-    """Search the best solution in random neighbours
+def vnd_method(initial_solution, methods, has_animation=False, title="VND Method"):
+    """Search a new solution for TSP with VND method
 
     Arguments:
-        initial_solution {list} -- list with initial solution
+        initial_solution {list} -- initial solution
+        methods {list} -- list with the sequence of the methods to be used
 
     Keyword Arguments:
-        limit {int} -- limit of not improvements (default: {5})
+        has_animation {bool} -- if will the animate the search (default: {False})
+        title {str} -- title of the animation (default: {"Best Improvement Method"})
 
     Returns:
-        list -- solution founded
-    """
-    current_solution = copy(
-        initial_solution)       # Copy initial solution as current solution
-    # Caculate the cost of the solution
-    min_cost = calculate_cost(initial_solution)
-    count = 0
-
-    while count < limit:
-        candidate_solution = copy(current_solution)
-        random.shuffle(candidate_solution)      # Generate a radom candidate
-        # Calculate the candidate's cost
-        candidate_cost = calculate_cost(candidate_solution)
-
-        # Check if the candidate's cost is the lowest
-        if candidate_cost <= min_cost:
-            min_cost = candidate_cost       # Change the lowest cost
-            current_solution = candidate_solution     # Change the best solution
-            count = 0       # Reboot the count
-        else:
-            count += 1      # Add 1 if not improve
-
-        if has_animation:
-            plot_animated(current_solution, title=title,
-                          has_points=False, show_key=True)
-
-    return current_solution
-
-
-def vnd_method(initial_solution, samples=5, has_animation=False, title="VND Method"):
-    """Search the best solution in random neighbours
-
-    Arguments:
-        initial_solution {list} -- list with initial solution
-
-    Keyword Arguments:
-        samples {int} -- number of set of neighborhoods to search (default: {5})
-
-    Returns:
-        list -- solution founded
+        list -- the founded solution
     """
     current_solution = copy(
         initial_solution)       # Copy initial solution as current solution
     # Caculate the cost of the solution
     min_cost = calculate_cost(initial_solution)
     k = 0
+    methods_dict = {'swap': swap_method, '2opt': two_opt_method}
 
-    while k < samples:
+    while k < len(methods):
+
         # Search the best solution in the neighborhood
-        best_candidate = first_improvement_method(
-            current_solution)
+        is_first = True if 'fi' in methods[k] else False
+        selected_method = ""
+
+        if 'swap' in methods[k]:
+            selected_method = 'swap'
+        elif '2opt' in methods[k]:
+            selected_method = '2opt'
+
+        best_candidate = methods_dict[selected_method](
+            current_solution, is_first=is_first, has_animation=has_animation, title=title)
         # Calculate the candidate's cost
         candidate_cost = calculate_cost(best_candidate)
 
@@ -167,9 +192,5 @@ def vnd_method(initial_solution, samples=5, has_animation=False, title="VND Meth
             k = 0       # Reboot the count
         else:
             k += 1      # Add 1 if not improve
-
-        if has_animation:
-            plot_animated(current_solution, title=title,
-                          has_points=False, show_key=True)
 
     return current_solution

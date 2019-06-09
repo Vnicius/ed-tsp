@@ -62,4 +62,4 @@ def plot_animated(graph, title="", has_points=False, show_key=False):
         for index, (x, y) in enumerate(zip(xs, ys)):
             plt.text(x, y, str(index), color="green", fontsize=12)
 
-    plt.pause(0.05)
+    plt.pause(0.01)

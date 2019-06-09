@@ -81,8 +81,7 @@ class InstanceReader():
             neighborhood = []
 
             for j, cost in enumerate(costs):
-                if cost != 0.0:
-                    neighborhood.append(Neighbor(node=nodes[j], cost=cost))
+                neighborhood.append(Neighbor(node=nodes[j], cost=cost))
 
             nodes[i].neighborhood = neighborhood
 
