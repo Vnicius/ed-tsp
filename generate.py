@@ -12,17 +12,17 @@ if not os.path.exists('tables'):
     os.mkdir('tables')
 
 # Instancias de teste
-for method in methods:
-    with open(f'{os.path.join("tables",method)}.csv', 'w', encoding='utf-8') as table:
-        table.write(
-            'instancia, otimo, media_solucao, melhor_solucao, media_tempo, gap\n')
+# for method in methods:
+#     with open(f'{os.path.join("tables",method)}.csv', 'w', encoding='utf-8') as table:
+#         table.write(
+#             'instancia, otimo, media_solucao, melhor_solucao, media_tempo, gap\n')
 
-    for instance in instances:
+#     for instance in instances:
 
-        print(f'{method} << {instance}')
+#         print(f'{method} << {instance}')
 
-        os.system(
-            f'python run.py instancias/instancias_teste/{instance}.txt -c nearest -m {method} -o {instances[instance]} -n 5 >> {os.path.join("tables",method)}.csv')
+#         os.system(
+#             f'python run.py instancias/instancias_teste/{instance}.txt -c nearest -m {method} -o {instances[instance]} -n 5 >> {os.path.join("tables",method)}.csv')
 
 for c in constructions:
     with open(f'{os.path.join("tables", c)}.csv', 'w', encoding='utf-8') as table:
@@ -36,15 +36,15 @@ for c in constructions:
 
 
 # instancias tsp cup
-for method in methods:
-    for instance in tsp:
-        print(f'{method} << {instance}')
+# for method in methods:
+#     for instance in tsp:
+#         print(f'{method} << {instance}')
 
-        os.system(
-            f'python run.py instancias/instancias_tsp_cup/{instance}.txt -c nearest -m {method} -o {tsp[instance]} -n 5 >> {os.path.join("tables",method)}.csv')
+#         os.system(
+#             f'python run.py instancias/instancias_tsp_cup/{instance}.txt -c nearest -m {method} -o {tsp[instance]} -n 2 >> {os.path.join("tables",method)}.csv')
 
 for c in constructions:
     for instance in tsp:
         print(f'{c} << {instance}')
         os.system(
-            f'python run.py instancias/instancias_teste/{instance}.txt -c {c} -m all -o {tsp[instance]} >> {os.path.join("tables", c)}.csv')
+            f'python run.py instancias/instancias_tsp_cup/{instance}.txt -c {c} -m all -o {tsp[instance]} >> {os.path.join("tables", c)}.csv')

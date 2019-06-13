@@ -60,7 +60,7 @@ def main_table(args):
             times.append(time() - t)
             costs.append(calculate_cost(swap))
 
-    if args.method in ['2opt', 'all']:
+    if args.method in ['2opt']:
 
         title = '2-OPT Method'
 
@@ -73,7 +73,7 @@ def main_table(args):
             times.append(time() - t)
             costs.append(calculate_cost(two_opt_solution))
 
-    if args.method in ['vnd', 'all']:
+    if args.method in ['vnd']:
 
         title = 'VND Method'
 
@@ -86,7 +86,7 @@ def main_table(args):
             times.append(time() - t)
             costs.append(calculate_cost(vnd_solution))
 
-    if args.method in ['vns', 'all']:
+    if args.method in ['vns', ]:
 
         title = 'VNS Method'
 
@@ -99,7 +99,7 @@ def main_table(args):
             times.append(time() - t)
             costs.append(calculate_cost(vns_solution))
 
-    if args.method in ['grasp', 'all']:
+    if args.method in ['grasp']:
 
         title = 'GRASP Method'
 
