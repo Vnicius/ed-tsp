@@ -5,10 +5,10 @@ from src.utils.InstanceReader import InstanceReader
 from src.ConstructionHeuristic import ConstructionHeuristic
 from src.utils.utils import calculate_cost, solution_to_string
 from src.utils.plotsolution import plot_solution
-from src.neighborhoodsearch import swap_method, two_opt_method, vnd_method
+from src.neighborhoodsearch import swap_method, two_opt_method, vnd_method, vns_method, grasp_method
 
-if __name__ == '__main__':
-    args = Arguments().args
+
+def main(args):
     reader = InstanceReader()
     instance = reader.get_instance(args.instance)
     construction = ConstructionHeuristic()
@@ -59,3 +59,32 @@ if __name__ == '__main__':
 
         if args.plot:
             plot_solution(vnd_solution, title)
+
+    if args.method in ['vns', 'all']:
+
+        title = 'VNS Method'
+        vns_solution = vns_method(
+            initial_solution, args.vnd_methods, interations=args.number_interations, has_animation=args.animate, title=title)
+        print()
+        print("VNS METHOD: ", solution_to_string(vns_solution))
+        print("VNS METHOD COST:", calculate_cost(vns_solution))
+
+        if args.plot:
+            plot_solution(vns_solution, title)
+
+    if args.method in ['grasp', 'all']:
+
+        title = 'GRASP Method'
+        grasp_solution = grasp_method(
+            initial_solution, args.vnd_methods, instance, interations=args.number_interations, has_animation=args.animate, title=title)
+        print()
+        print("GRASP METHOD: ", solution_to_string(grasp_solution))
+        print("GRASP METHOD COST:", calculate_cost(grasp_solution))
+
+        if args.plot:
+            plot_solution(grasp_solution, title)
+
+
+if __name__ == '__main__':
+    args = Arguments().args
+    main(args)

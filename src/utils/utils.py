@@ -35,36 +35,6 @@ def __get_cost(node, prev_key, next_key):
     return cost
 
 
-# def calculate_swap_cost(solution, i, j):
-
-#     prev_i, i_key, next_i = __get_index_neighborhood(solution, i)
-#     prev_j, j_key, next_j = __get_index_neighborhood(solution, j)
-#     i_node = solution[i]
-#     j_node = solution[j]
-
-#     old_i_cost = __get_cost(i_node, prev_i, next_i)
-#     old_j_cost = __get_cost(j_node, prev_j, next_j)
-#     new_i_cost = 0
-#     new_j_cost = 0
-#     diff_return_cost = 0
-
-#     if j - i == 1:
-#         prev_j = j_key
-#         next_i = i_key
-#     elif j == len(solution) - 1 and i == 0:
-#         next_j = j_key
-
-#     new_i_cost = __get_cost(j_node, prev_i, next_i)
-#     new_j_cost = __get_cost(i_node, prev_j, next_j)
-
-#     if i == 0 and j != len(solution) - 1:
-#         old_return_cost = solution[-1].neighborhood[i_key].cost
-#         new_return_cost = solution[-1].neighborhood[j_key].cost
-#         diff_return_cost = new_return_cost - old_return_cost
-
-#     return (new_i_cost - old_i_cost) + (new_j_cost - old_j_cost) + diff_return_cost
-
-
 def calculate_swap_cost(solution, i, j, is_2opt=False):
 
     prev_i, i_key, next_i = __get_index_neighborhood(solution, i)

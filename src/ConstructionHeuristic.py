@@ -4,7 +4,7 @@ import random
 
 
 class ConstructionHeuristic():
-    def construct_nearest(self, instance):
+    def construct_nearest(self, instance, inital=0):
         """Construct the inital solution
 
         Arguments:
@@ -14,7 +14,7 @@ class ConstructionHeuristic():
             list -- initial solution
         """
         data_graph = instance.data
-        initial_solution = [data_graph[0]]
+        initial_solution = [data_graph[inital]]
 
         while len(initial_solution) < instance.dimension:
             last_node = initial_solution[-1]

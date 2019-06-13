@@ -3,6 +3,7 @@
 from copy import copy
 from src.utils.utils import calculate_cost, swap_neighborhood, solution_to_string, calculate_swap_cost, swap_2opt
 from src.utils.plotsolution import plot_animated
+from src.ConstructionHeuristic import ConstructionHeuristic
 import random
 
 
@@ -188,6 +189,97 @@ def vnd_method(initial_solution, methods, has_animation=False, title="VND Method
         if candidate_cost < min_cost:
             # Define the candidate solution as the current solution
             current_solution = best_candidate
+            min_cost = candidate_cost       # Define the candidate's cost as the lowest
+            k = 0       # Reboot the count
+        else:
+            k += 1      # Add 1 if not improve
+
+    return current_solution
+
+
+def vns_method(initial_solution, vnd_methods, interations=5, has_animation=False, title="VNS Method"):
+    """Search a new solution for TSP with VND method
+
+    Arguments:
+        initial_solution {list} -- initial solution
+        methods {list} -- list with the sequence of the methods to be used
+
+    Keyword Arguments:
+        has_animation {bool} -- if will the animate the search (default: {False})
+        title {str} -- title of the animation (default: {"Best Improvement Method"})
+
+    Returns:
+        list -- the founded solution
+    """
+    current_solution = copy(
+        initial_solution)       # Copy initial solution as current solution
+    # Caculate the cost of the solution
+    min_cost = calculate_cost(initial_solution)
+    k = 0
+    size = len(current_solution)
+
+    while k < interations:
+        i_index = random.randint(0, size - 2)
+        j_index = random.randint(i_index, size - 1)
+
+        initial_candidate = swap_2opt(
+            current_solution[:], i_index, j_index)  # pertubation
+
+        candidate_solution = vnd_method(
+            initial_candidate, vnd_methods, has_animation, title)
+
+        # Calculate the candidate's cost
+        candidate_cost = calculate_cost(candidate_solution)
+
+        # Check if the candidate's cost is the lowest
+        if candidate_cost < min_cost:
+            # Define the candidate solution as the current solution
+            current_solution = candidate_solution
+            min_cost = candidate_cost       # Define the candidate's cost as the lowest
+            k = 0       # Reboot the count
+        else:
+            k += 1      # Add 1 if not improve
+
+    return current_solution
+
+
+def grasp_method(initial_solution, vnd_methods, instance, interations=5, has_animation=False, title="VNS Method"):
+    """Search a new solution for TSP with VND method
+
+    Arguments:
+        initial_solution {list} -- initial solution
+        methods {list} -- list with the sequence of the methods to be used
+
+    Keyword Arguments:
+        has_animation {bool} -- if will the animate the search (default: {False})
+        title {str} -- title of the animation (default: {"Best Improvement Method"})
+
+    Returns:
+        list -- the founded solution
+    """
+    current_solution = copy(
+        initial_solution)       # Copy initial solution as current solution
+    # Caculate the cost of the solution
+    min_cost = calculate_cost(initial_solution)
+    k = 0
+    size = len(current_solution)
+    construction = ConstructionHeuristic()
+
+    while k < interations:
+        i = random.randint(0, size - 1)
+
+        initial_candidate = construction.construct_nearest(instance, i)
+
+        candidate_solution = vnd_method(
+            initial_candidate, vnd_methods, has_animation, title)
+
+        # Calculate the candidate's cost
+        candidate_cost = calculate_cost(candidate_solution)
+
+        # Check if the candidate's cost is the lowest
+        if candidate_cost < min_cost:
+            # Define the candidate solution as the current solution
+            current_solution = candidate_solution
             min_cost = candidate_cost       # Define the candidate's cost as the lowest
             k = 0       # Reboot the count
         else:
